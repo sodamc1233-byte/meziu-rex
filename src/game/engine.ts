@@ -1,4 +1,4 @@
-import { loadGameAssets, type GameAssets } from './assets';
+import { createFallbackGameAssets, loadGameAssets, type GameAssets } from './assets';
 import { SoundEngine } from './audio';
 import {
   BOOK_X,
@@ -196,7 +196,9 @@ export class MeziuGameEngine {
         this.assets = assets;
       })
       .catch((err) => {
-        console.error('Failed to load game assets:', err);
+        console.error('Failed to load game assets, using fallback:', err);
+        if (this.destroyed) return;
+        this.assets = createFallbackGameAssets();
       });
 
     this.syncBodyState();

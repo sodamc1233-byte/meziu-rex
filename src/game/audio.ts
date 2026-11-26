@@ -1,10 +1,12 @@
-const TITLE_MUSIC_URL = '/assets/aistudio/tiktok_video.mp4_9e7a66e8.mp3';
+const TITLE_MUSIC_URL = './assets/aistudio/tiktok_video.mp4_9e7a66e8.mp3';
 
 function resolveAudioUrl(src: string): string {
   if (typeof window !== 'undefined') {
     const inlineMap = (window as unknown as { __INLINE_ASSETS__?: Record<string, string> }).__INLINE_ASSETS__;
-    if (inlineMap && inlineMap[src]) {
-      return inlineMap[src];
+    if (inlineMap) {
+      const altKey = src.startsWith('./') ? src.slice(1) : `./${src.replace(/^\//, '')}`;
+      if (inlineMap[src]) return inlineMap[src];
+      if (inlineMap[altKey]) return inlineMap[altKey];
     }
   }
   return src;
@@ -59,6 +61,9 @@ export class SoundEngine {
       audio.loop = true;
       audio.preload = 'auto';
       audio.volume = this.muted ? 0 : 0.42;
+      audio.onerror = () => {
+        // Ignore missing/blocked audio asset gracefully so gameplay continues uninterrupted
+      };
       this.titleAudio = audio;
     }
     return this.titleAudio;

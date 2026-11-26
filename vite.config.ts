@@ -6,12 +6,12 @@ import path from 'path';
 import {defineConfig, type Plugin, type ViteDevServer} from 'vite';
 import {VitePWA} from 'vite-plugin-pwa';
 
-const PORTABLE_ASSETS: Array<{publicPath: string; mime: string}> = [
-  {publicPath: '/assets/aistudio/image_bfcdf26e.png', mime: 'image/png'},
-  {publicPath: '/assets/aistudio/image_d81caafc.png', mime: 'image/png'},
-  {publicPath: '/assets/aistudio/image_d53618c1.png', mime: 'image/png'},
-  {publicPath: '/assets/aistudio/image_96ebf6d7.png', mime: 'image/png'},
-  {publicPath: '/assets/aistudio/tiktok_video.mp4_9e7a66e8.mp3', mime: 'audio/mpeg'},
+const PORTABLE_ASSETS: Array<{publicPath: string; inlineKey: string; mime: string}> = [
+  {publicPath: 'assets/aistudio/image_bfcdf26e.png', inlineKey: './assets/aistudio/image_bfcdf26e.png', mime: 'image/png'},
+  {publicPath: 'assets/aistudio/image_d81caafc.png', inlineKey: './assets/aistudio/image_d81caafc.png', mime: 'image/png'},
+  {publicPath: 'assets/aistudio/image_d53618c1.png', inlineKey: './assets/aistudio/image_d53618c1.png', mime: 'image/png'},
+  {publicPath: 'assets/aistudio/image_96ebf6d7.png', inlineKey: './assets/aistudio/image_96ebf6d7.png', mime: 'image/png'},
+  {publicPath: 'assets/aistudio/tiktok_video.mp4_9e7a66e8.mp3', inlineKey: './assets/aistudio/tiktok_video.mp4_9e7a66e8.mp3', mime: 'audio/mpeg'},
 ];
 
 function buildInlineAssetScript(rootDir: string): string {
@@ -20,7 +20,7 @@ function buildInlineAssetScript(rootDir: string): string {
     const absPath = path.join(rootDir, 'public', item.publicPath);
     if (fs.existsSync(absPath)) {
       const b64 = fs.readFileSync(absPath).toString('base64');
-      map[item.publicPath] = `data:${item.mime};base64,${b64}`;
+      map[item.inlineKey] = `data:${item.mime};base64,${b64}`;
     }
   }
   return `window.__INLINE_ASSETS__=${JSON.stringify(map)};`;
@@ -141,14 +141,16 @@ function meziuPortableExportPlugin(rootDir: string): Plugin {
 
 export default defineConfig(() => {
   return {
+    base: './',
     plugins: [
       react(),
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
+        manifestFilename: 'manifest.json',
         includeAssets: ['icon.svg', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png', 'pwa-maskable-512x512.png'],
         manifest: {
-          id: '/',
+          id: './',
           name: 'Meziu Rex — Level 1 | Nekame',
           short_name: 'Meziu Rex',
           description: 'Game hành động giải đố 2.5D Meziu Rex Level 1 phát hành bởi Nekame.',
@@ -156,23 +158,23 @@ export default defineConfig(() => {
           background_color: '#1f251e',
           display: 'standalone',
           orientation: 'landscape',
-          start_url: '/',
-          scope: '/',
+          start_url: './',
+          scope: './',
           icons: [
             {
-              src: '/pwa-192x192.png',
+              src: './pwa-192x192.png',
               sizes: '192x192',
               type: 'image/png',
               purpose: 'any',
             },
             {
-              src: '/pwa-512x512.png',
+              src: './pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'any',
             },
             {
-              src: '/pwa-maskable-512x512.png',
+              src: './pwa-maskable-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'maskable',

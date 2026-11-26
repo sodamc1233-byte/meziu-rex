@@ -50,7 +50,7 @@ export default function App() {
       setReleaseModalOpen(true);
       setAutoDownloaded(true);
       const a = document.createElement('a');
-      a.href = '/Meziu-Rex-Nekame.html';
+      a.href = './Meziu-Rex-Nekame.html';
       a.download = 'Meziu-Rex-Nekame.html';
       document.body.appendChild(a);
       a.click();

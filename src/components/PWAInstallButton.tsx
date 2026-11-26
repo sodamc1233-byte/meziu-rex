@@ -46,11 +46,12 @@ export function AppDownloadModal({
 
   if (!open) return null;
 
-  const origin = typeof window !== 'undefined' && window.location.origin.startsWith('http')
-    ? window.location.origin
-    : '';
-  const directFileLink = origin ? `${origin}/?dl=1` : '/Meziu-Rex-Nekame.html';
-  const releasePageLink = origin ? `${origin}/?tai=1` : '/';
+  const baseUrl =
+    typeof window !== 'undefined' && window.location.origin.startsWith('http')
+      ? `${window.location.origin}${window.location.pathname.replace(/index\.html$/, '')}`
+      : '';
+  const directFileLink = baseUrl ? `${baseUrl}?dl=1` : './Meziu-Rex-Nekame.html';
+  const releasePageLink = baseUrl ? `${baseUrl}?tai=1` : './';
 
   const handleCopy = async (which: 'file' | 'page', value: string) => {
     const ok = await copyTextFallback(value);
@@ -115,7 +116,7 @@ export function AppDownloadModal({
         <div className="mt-5 flex flex-col gap-3">
           {/* Primary: Direct 1-file Portable Download for Players (Phone & PC) */}
           <a
-            href="/Meziu-Rex-Nekame.html"
+            href="./Meziu-Rex-Nekame.html"
             download="Meziu-Rex-Nekame.html"
             className="flex items-center gap-3.5 w-full rounded-xl bg-[#e5c158] hover:bg-[#f0d06e] active:scale-[0.99] text-[#181d16] px-4 py-3.5 shadow-[0_5px_0_#9b7d2b] transition-transform"
           >
@@ -133,7 +134,7 @@ export function AppDownloadModal({
           </a>
 
           {/* Shareable Player Release Links (Direct File Link & Web Release Link) */}
-          {origin && (
+          {baseUrl && (
             <div className="rounded-xl bg-[#1a2018] border border-[#525c47] p-3.5 flex flex-col gap-2.5">
               <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#e5c158]">
                 <Share2 className="w-3.5 h-3.5" aria-hidden="true" />
@@ -243,7 +244,7 @@ export function AppDownloadModal({
                         <strong className="text-[#e5c158]">Thêm vào MH chính</strong> trên điện thoại.
                       </p>
                       <a
-                        href="/"
+                        href="./"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 font-bold text-[#e5c158] hover:underline"
