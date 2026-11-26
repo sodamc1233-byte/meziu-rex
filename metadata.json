@@ -1,0 +1,6 @@
+{
+  "name": "Meziu Rex — Nekame",
+  "description": "Game hành động giải đố 2.5D Meziu Rex Level 1 phát hành bởi Nekame.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
